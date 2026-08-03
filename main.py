@@ -1,6 +1,5 @@
-def main():
-    print("Hello from mission2!")
+from service.run_game import run_start
 
 
 if __name__ == "__main__":
-    main()
+    run_start()
