@@ -14,7 +14,8 @@ class QuizGame:
             2: ("퀴즈 추가", self.add),
             3: ("퀴즈 목록", self.list),
             4: ("점수 확인", self.score),
-            5: ("종료", self.exit),
+            5: ("문제 삭제", self.delete),
+            6: ("종료", self.exit),
         }
         self.FULL_SCORE = 10
         self.HINT_SCORE = 9
@@ -80,7 +81,7 @@ class QuizGame:
 
             point = self.FULL_SCORE
             if user_answer == self.HINT_OPTION:
-                print("힌트 : ", quiz.hint)
+                quiz.display_hint()
                 point = self.HINT_SCORE
                 user_answer = self._get_user_answer()
 
@@ -152,9 +153,10 @@ class QuizGame:
             return
 
         for i, q in enumerate(quizzes, start=1):
-            quiz = Quiz(q["question"], q["choices"], q["answer"])
+            quiz = Quiz(q["question"], q["choices"], q["answer"], q.get("hint", "힌트가 없습니다."))
 
             quiz.display(i)
+            quiz.display_hint()
             print(f"\n정답 : {q['answer']}")
 
         print(f"\n총 문제 수 : {len(quizzes)}")
@@ -167,6 +169,37 @@ class QuizGame:
         print("현재 상태를 저장하고 게임을 종료합니다.")
 
         return False
+
+    def delete(self):
+        print("문제를 삭제합니다.")
+        quizzes = self.quizzes
+        if not quizzes:
+            data_control.quiz_data_reset(self.data)
+            return
+
+        for i, q in enumerate(quizzes, start=1):
+            quiz = Quiz(q["question"], q["choices"], q["answer"], q.get("hint", "힌트가 없습니다."))
+            quiz.display(i)
+            quiz.display_hint()
+            print(f"\n정답 : {q['answer']}")
+            print("---------------------")
+
+        while True:
+            try:
+                delete_index = int(input("삭제할 문제 번호를 입력하세요 (취소는 0번) : ").strip())
+                if delete_index == 0:
+                    print("삭제를 취소하고 메뉴로 돌아갑니다.")
+                    return
+                elif 1 <= delete_index <= len(quizzes):
+                    break
+                else:
+                    print(f"1부터 {len(quizzes)} 사이의 숫자를 입력해주세요.")
+            except ValueError:
+                print("잘못된 입력입니다. 숫자를 입력해주세요.")
+
+        deleted_quiz = quizzes.pop(delete_index - 1)
+        data_control.save_data(self.data)
+        print(f"문제 '{deleted_quiz['question']}' \n삭제되었습니다. 메뉴로 돌아갑니다.")
 
 
     def _get_user_answer():
