@@ -19,14 +19,23 @@ class Game:
 
             quiz.display(i)
 
-            user_answer = int(input("정답은 : ").strip())
+            try:
+                user_answer = int(input("정답은 : ").strip())
+            except ValueError:
+                user_answer = -1
 
             if quiz.check_answer(user_answer):
                 print("정답입니다.")
                 score += 10
             else:
                 print(f"틀렸습니다. 정답은: {quiz.answer}번 {quiz.choices[quiz.answer-1]}")
+
         print(f"\n 최종 점수 : {score}")
+
+        bast_score = data.get("best_score")
+        if bast_score < score:
+            data["best_score"] = score
+            print("최고 점수가 갱신됐습니다.")
 
 
     def add(data):
@@ -91,7 +100,7 @@ class Game:
         print(f"\n총 문제 수 : {len(quizzes)}")
         
     def score(data):
-        print("점수를 조회합니다.")
+        print(f"현재 최고 점수는 {data["best_score"]}입니다")
 
     def exit(data):
         data_control.save_data(data)
