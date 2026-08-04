@@ -32,6 +32,47 @@ class Game:
 
     def add(data):
         print("문제를 추가합니다.")
+        question = input("문제를 입력하세요 : ").strip()
+
+        choices = []
+        choice_range = range(1, 5)
+        for i in choice_range:
+            c = input(f"선택지 {i}번 : ").strip()
+            choices.append(c)
+
+        answer = 0
+        while answer not in choice_range:
+            try:
+                answer = int(input("정답 번호(1-4) : ").strip())
+            except ValueError:
+                print("숫자가 아닌 값을 입력하셨습니다. 정답은 숫자(1-4)로 입력해주세요.")
+            else:
+                if answer not in choice_range:
+                    print("정답은 숫자 중 1-4 사이에서 입력해주세요.")
+        
+
+        new_quiz = {
+            "question": question,
+            "choices": choices,
+            "answer": answer,
+        }
+
+        print("문제가 맞는지 확인해 주세요.")
+        print("---------------------")
+        print(f"[문제] {new_quiz['question']}")
+        for i, c in enumerate(new_quiz["choices"], start=1):
+            print(f"{i}. {c}")
+        print(f"정답 : {new_quiz['answer']}")
+
+        checker = input("맞으면 1번 틀리면 다른 아무 문자를 입력해주세요 : ")
+        if not checker == "1":
+            print("문제를 저장하지 않고 메뉴로 돌아갑니다.")
+            return
+        data["quizzes"].append(new_quiz)
+        data_control.save_data(data)
+        print("퀴즈를 추가하였습니다. 메뉴로 돌아갑니다.")
+
+
 
     def list(data):
         print("문제 리스트를 조회합니다.")
