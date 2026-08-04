@@ -43,10 +43,26 @@ class QuizGame:
         if not quizzes:
             data_control.quiz_data_reset(self.data)
             return
-        
+
+        print("몇 문제를 풀지 선택해주세요. (최대 10문제)")
+        while True:
+            try:
+                num_questions = int(input("문제 수: ").strip())
+                if num_questions < 1 or num_questions > 10:
+                    print("1 이상 10 이하의 숫자를 입력해주세요.")
+                else:
+                    break
+            except ValueError:
+                print("잘못된 입력입니다. 1-10 사이의 숫자를 입력해주세요.")
+
+        min_questions = min(10, len(quizzes), num_questions)
+        print("-----------------------")
+        print(f"\n총 {min_questions}문제를 풀게 됩니다. 시작합니다!\n")
+        print("-----------------------")
+
         score = 0
         selected_indices = []
-        for _ in range(min(10, len(quizzes))):
+        for _ in range(min_questions):
             idx = randint(0, len(quizzes) - 1)
             while idx in selected_indices:
                 idx = randint(0, len(quizzes) - 1)
@@ -70,8 +86,8 @@ class QuizGame:
 
         print(f"\n 최종 점수 : {score}")
 
-        bast_score = self.best_score
-        if bast_score < score:
+        best_score = self.best_score
+        if best_score < score:
             self.data["best_score"] = score
             print("최고 점수가 갱신됐습니다.")
 
