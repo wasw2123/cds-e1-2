@@ -13,20 +13,25 @@ MENUS = {
 def run_start():
     data = data_control.load_data()
 
-    while True:
-        print("\n나만의 퀴즈게임\n 메뉴를 선택해주세요.")
-        for k, (t, _) in MENUS.items():
-            print(f'{k}. {t}')
+    try:
+        while True:
+            print("\n나만의 퀴즈게임\n 메뉴를 선택해주세요.")
+            for k, (t, _) in MENUS.items():
+                print(f'{k}. {t}')
 
-        try:
-            menu_selected = int(input("메뉴 선택: ").strip())
+            try:
+                menu_selected = int(input("메뉴 선택: ").strip())
 
-            if menu_selected in MENUS:
-                title, func = MENUS[menu_selected]
-                result = func(data)
-                if result is False:
-                    break
+                if menu_selected in MENUS:
+                    title, func = MENUS[menu_selected]
+                    result = func(data)
+                    if result is False:
+                        break
 
-        except ValueError: 
-            print("잘못된 입력입니다. 1-5 사이의 숫자로 입력해주세요.")
+            except ValueError: 
+                print("잘못된 입력입니다. 1-5 사이의 숫자로 입력해주세요.")
+                
+    except (KeyboardInterrupt, EOFError):
+        data_control.save_data(data)
+        print("현재 상황을 저장하고 게임을 종료합니다.")
 

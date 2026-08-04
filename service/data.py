@@ -52,4 +52,8 @@ class DataControl:
         with open(self.file_path, "w", encoding=self.encoding) as f:
             json.dump(data, f, ensure_ascii=self.ensure_ascii, indent=self.indent)
 
+    def quiz_data_reset(self, data):
+            data["quizzes"] = DEFAULT_DATA["quizzes"]
+            print("퀴즈 데이터가 존재하지 않습니다.\n데이터를 초기화하고 메뉴로 돌아갑니다.")
+
 data_control = DataControl()
