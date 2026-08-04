@@ -16,6 +16,9 @@ class QuizGame:
             4: ("점수 확인", self.score),
             5: ("종료", self.exit),
         }
+        self.FULL_SCORE = 10
+        self.HINT_SCORE = 9
+        self.HINT_OPTION = 5
 
 
     def menu(self):
@@ -69,18 +72,21 @@ class QuizGame:
             selected_indices.append(idx)
 
         for i, q in enumerate(selected_indices, start=1):
-            quiz = Quiz(quizzes[q]["question"], quizzes[q]["choices"], quizzes[q]["answer"])
+            quiz = Quiz(quizzes[q]["question"], quizzes[q]["choices"], quizzes[q]["answer"], quizzes[q].get("hint", "힌트가 없습니다."))
 
             quiz.display(i)
 
-            try:
-                user_answer = int(input("정답은 : ").strip())
-            except ValueError:
-                user_answer = -1
+            user_answer = self._get_user_answer()
+
+            point = self.FULL_SCORE
+            if user_answer == self.HINT_OPTION:
+                print("힌트 : ", quiz.hint)
+                point = self.HINT_SCORE
+                user_answer = self._get_user_answer()
 
             if quiz.check_answer(user_answer):
-                print("정답입니다.")
-                score += 10
+                score += point
+                print(f"정답입니다. {point}점 획득")
             else:
                 print(f"틀렸습니다. 정답은: {quiz.answer}번 {quiz.choices[quiz.answer-1]}")
 
@@ -161,5 +167,13 @@ class QuizGame:
         print("현재 상태를 저장하고 게임을 종료합니다.")
 
         return False
+
+
+    def _get_user_answer():
+        try:
+            user_answer = int(input("정답은 : ").strip())
+        except ValueError:
+            user_answer = -1
+        return user_answer
 
 game = QuizGame()
