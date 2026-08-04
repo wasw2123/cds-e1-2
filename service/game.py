@@ -2,14 +2,44 @@ from service.data import data_control
 from service.quiz import Quiz
 
 
+class QuizGame:
+    def __init__(self):
+        self.data = data_control.load_data()
+        self.quizzes = self.data.get("quizzes")
+        self.best_score = self.data.get("best_score")
+        self.MENUS = {
+            1: ("퀴즈 풀기", self.play),
+            2: ("퀴즈 추가", self.add),
+            3: ("퀴즈 목록", self.list),
+            4: ("점수 확인", self.score),
+            5: ("종료", self.exit),
+        }
 
-class Game:
-    def play(data: dict) -> None:
+
+    def menu(self):
+        print("\n나만의 퀴즈게임\n 메뉴를 선택해주세요.")
+        for k, (t, _) in self.MENUS.items():
+            print(f'{k}. {t}')
+
+        try:
+            menu_selected = int(input("메뉴 선택: ").strip())
+
+            if menu_selected in self.MENUS:
+                _, func = self.MENUS[menu_selected]
+                result = func()
+                if result is False:
+                    return False
+
+        except ValueError: 
+            print("잘못된 입력입니다. 메뉴와 매칭되는 숫자를 입력해주세요.")
+
+    
+    def play(self) -> None:
         print("게임을 시작합니다.\n")
 
-        quizzes = data.get("quizzes")
+        quizzes = self.quizzes
         if not quizzes:
-            data_control.quiz_data_reset(data)
+            data_control.quiz_data_reset(self.data)
             return
         
         score = 0
@@ -32,13 +62,13 @@ class Game:
 
         print(f"\n 최종 점수 : {score}")
 
-        bast_score = data.get("best_score")
+        bast_score = self.best_score
         if bast_score < score:
-            data["best_score"] = score
+            self.data["best_score"] = score
             print("최고 점수가 갱신됐습니다.")
 
 
-    def add(data):
+    def add(self):
         print("문제를 추가합니다.")
         question = input("문제를 입력하세요 : ").strip()
 
@@ -76,34 +106,36 @@ class Game:
         if not checker == "1":
             print("문제를 저장하지 않고 메뉴로 돌아갑니다.")
             return
-        data["quizzes"].append(new_quiz)
-        data_control.save_data(data)
+        self.data["quizzes"].append(new_quiz)
+        data_control.save_data(self.data)
         print("퀴즈를 추가하였습니다. 메뉴로 돌아갑니다.")
 
 
 
-    def list(data):
+    def list(self):
         print("문제 리스트를 조회합니다.")
         print("---------------------")
 
-        quizzes = data.get("quizzes")
+        quizzes = self.quizzes
         if not quizzes:
-            data_control.quiz_data_reset(data)
+            data_control.quiz_data_reset(self.data)
             return
 
         for i, q in enumerate(quizzes, start=1):
             quiz = Quiz(q["question"], q["choices"], q["answer"])
 
             quiz.display(i)
-            print(f"\n정답 : {q["answer"]}")
+            print(f"\n정답 : {q['answer']}")
 
         print(f"\n총 문제 수 : {len(quizzes)}")
         
-    def score(data):
-        print(f"현재 최고 점수는 {data["best_score"]}입니다")
+    def score(self):
+        print(f"현재 최고 점수는 {self.best_score}입니다")
 
-    def exit(data):
-        data_control.save_data(data)
+    def exit(self):
+        data_control.save_data(self.data)
         print("현재 상태를 저장하고 게임을 종료합니다.")
 
         return False
+
+game = QuizGame()
