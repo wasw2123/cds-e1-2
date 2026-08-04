@@ -1,3 +1,5 @@
+from random import randint
+
 from service.data import data_control
 from service.quiz import Quiz
 
@@ -43,9 +45,15 @@ class QuizGame:
             return
         
         score = 0
+        selected_indices = []
+        for _ in range(min(10, len(quizzes))):
+            idx = randint(0, len(quizzes) - 1)
+            while idx in selected_indices:
+                idx = randint(0, len(quizzes) - 1)
+            selected_indices.append(idx)
 
-        for i, q in enumerate(quizzes, start=1):
-            quiz = Quiz(q["question"], q["choices"], q["answer"])
+        for i, q in enumerate(selected_indices, start=1):
+            quiz = Quiz(quizzes[q]["question"], quizzes[q]["choices"], quizzes[q]["answer"])
 
             quiz.display(i)
 
