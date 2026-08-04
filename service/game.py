@@ -1,4 +1,5 @@
 from random import randint
+from datetime import datetime
 
 from service.data import data_control
 from service.quiz import Quiz
@@ -15,7 +16,8 @@ class QuizGame:
             3: ("퀴즈 목록", self.list),
             4: ("점수 확인", self.score),
             5: ("문제 삭제", self.delete),
-            6: ("종료", self.exit),
+            6: ("게임 기록 조회", self.history),
+            0: ("종료", self.exit),
         }
         self.FULL_SCORE = 10
         self.HINT_SCORE = 9
@@ -59,14 +61,14 @@ class QuizGame:
             except ValueError:
                 print("잘못된 입력입니다. 1-10 사이의 숫자를 입력해주세요.")
 
-        min_questions = min(10, len(quizzes), num_questions)
+        question_count = min(10, len(quizzes), num_questions)
         print("-----------------------")
-        print(f"\n총 {min_questions}문제를 풀게 됩니다. 시작합니다!\n")
+        print(f"\n총 {question_count}문제를 풀게 됩니다. 시작합니다!\n")
         print("-----------------------")
 
         score = 0
         selected_indices = []
-        for _ in range(min_questions):
+        for _ in range(question_count):
             idx = randint(0, len(quizzes) - 1)
             while idx in selected_indices:
                 idx = randint(0, len(quizzes) - 1)
@@ -93,10 +95,18 @@ class QuizGame:
 
         print(f"\n 최종 점수 : {score}")
 
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.data.setdefault("history", []).append({
+            "timestamp": timestamp,
+            "questions": question_count,
+            "score": score
+        })
+
         best_score = self.best_score
         if best_score < score:
             self.data["best_score"] = score
             print("최고 점수가 갱신됐습니다.")
+        data_control.save_data(self.data)
 
 
     def add(self):
@@ -201,8 +211,21 @@ class QuizGame:
         data_control.save_data(self.data)
         print(f"문제 '{deleted_quiz['question']}' \n삭제되었습니다. 메뉴로 돌아갑니다.")
 
+    def history(self):
+        print("게임 기록을 조회합니다.")
+        history = self.data.get("history", [])
+        if not history:
+            print("기록이 없습니다.")
+            return
 
-    def _get_user_answer():
+        for record in history[::-1]:
+            timestamp = record["timestamp"]
+            questions = record["questions"]
+            score = record["score"]
+            print(f"날짜: {timestamp}, 문제 수: {questions}, 점수: {score}")
+
+
+    def _get_user_answer(self) -> int:
         try:
             user_answer = int(input("정답은 : ").strip())
         except ValueError:

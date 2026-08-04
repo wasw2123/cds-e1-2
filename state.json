@@ -56,5 +56,17 @@
             "hint": "파이썬에서 표준 출력에 문자열을 보내는 내장 함수입니다."
         }
     ],
-    "best_score": 0
+    "best_score": 10,
+    "history": [
+        {
+            "timestamp": "2026-08-04 18:19:33",
+            "questions": 1,
+            "score": 10
+        },
+        {
+            "timestamp": "2026-08-04 18:19:55",
+            "questions": 2,
+            "score": 10
+        }
+    ]
 }
