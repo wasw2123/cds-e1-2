@@ -40,7 +40,8 @@ class DataControl:
 
     def __init__(self):
         self.file_path = "state.json"
-        self.encoding = "utf_8"
+        # 표준 표기법으로 변경
+        self.encoding = "utf-8"
         self.ensure_ascii = False
         self.indent = 4
 
@@ -48,17 +49,35 @@ class DataControl:
         try:
             with open(self.file_path, "r", encoding=self.encoding) as f:
                 return json.load(f)
-                
-        except (FileNotFoundError, json.JSONDecodeError):
-            print("저장 파일이 손상되었습니다. 데이터를 초기화합니다.")
+
+        except FileNotFoundError:
+            print("저장 파일이 없습니다. 기본 데이터로 초기화하고 파일을 생성합니다.")
+            try:
+                self.save_data(DEFAULT_DATA)
+            except Exception:
+                # 저장 실패는 프로그램이 계속 실행되더라도 경고만 남김
+                print("주의: 기본 데이터를 파일로 저장하지 못했습니다.")
             return DEFAULT_DATA
 
-    def save_data(self, data):                                                                                                                                                          
-        with open(self.file_path, "w", encoding=self.encoding) as f:
-            json.dump(data, f, ensure_ascii=self.ensure_ascii, indent=self.indent)
+        except json.JSONDecodeError:
+            print("저장 파일이 손상되었습니다. 기본 데이터로 초기화합니다.")
+            try:
+                self.save_data(DEFAULT_DATA)
+            except Exception:
+                print("주의: 손상된 파일 복구를 위해 기본 데이터를 파일로 저장하지 못했습니다.")
+            return DEFAULT_DATA
+
+    def save_data(self, data):
+        try:
+            with open(self.file_path, "w", encoding=self.encoding) as f:
+                json.dump(data, f, ensure_ascii=self.ensure_ascii, indent=self.indent)
+        except Exception as e:
+            # 저장 실패는 경고만 출력하고 예외는 전파하지 않음
+            print(f"데이터 저장 중 오류 발생: {e}")
 
     def quiz_data_reset(self, data):
-            data["quizzes"] = DEFAULT_DATA["quizzes"]
-            print("퀴즈 데이터가 존재하지 않습니다.\n데이터를 초기화하고 메뉴로 돌아갑니다.")
+        data["quizzes"] = DEFAULT_DATA["quizzes"]
+        print("퀴즈 데이터가 존재하지 않습니다.\n데이터를 초기화하고 메뉴로 돌아갑니다.")
+
 
 data_control = DataControl()
