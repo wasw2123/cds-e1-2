@@ -67,6 +67,16 @@
             "timestamp": "2026-08-04 18:19:55",
             "questions": 2,
             "score": 10
+        },
+        {
+            "timestamp": "2026-08-05 17:36:11",
+            "questions": 1,
+            "score": 10
+        },
+        {
+            "timestamp": "2026-08-05 17:38:49",
+            "questions": 1,
+            "score": 9
         }
     ]
 }
