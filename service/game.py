@@ -88,7 +88,7 @@ class QuizGame:
             if user_answer == self.HINT_OPTION:
                 quiz.display_hint()
                 point = self.HINT_SCORE
-                user_answer = self._get_user_answer()
+                user_answer = self._get_user_answer("정답은 (1-4) : ")
 
             if quiz.check_answer(user_answer):
                 score += point
@@ -235,16 +235,17 @@ class QuizGame:
             print(f"날짜: {timestamp}, 문제 수: {questions}, 점수: {score}")
 
 
-    def _get_user_answer(self) -> int:
+    def _get_user_answer(self, msg="정답은 (1-4, 힌트: 5) : ") -> int:
         while True:
             try:
-                raw = get_user_input("정답은 (1-4, 힌트: 5) : ")
+                raw = get_user_input(msg)
                 val = int(raw)
                 if val < 1 or val > self.HINT_OPTION:
                     print(f"1-{self.HINT_OPTION} 사이의 숫자를 입력해주세요. (힌트: {self.HINT_OPTION})")
                     continue
                 return val
             except ValueError:
-                return -1
+                print("잘못된 입력입니다. 숫자를 입력해주세요.")
+                continue
 
 game = QuizGame()

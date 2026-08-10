@@ -7,7 +7,7 @@
 - 개념: 무엇인가
 - 왜 필요한가: 퀴즈 게임에서 어떤 문제를 해결하는가
 - 코드 예시: 실제로 어떻게 쓰는가
-- 설명 연습: 발표나 회고 때 말할 수 있는 문장
+- 요약: 앞에서 배운 내용을 짧게 정리한 문장
 
 ---
 
@@ -41,37 +41,70 @@ if user_answer == answer:
 
 `score += 10`은 `score = score + 10`과 같은 뜻입니다.
 
-설명 연습:
+요약:
 
 > 변수는 데이터를 기억하기 위해 사용하는 이름입니다. 퀴즈 게임에서는 현재 점수나 최고 점수처럼 계속 바뀌고 다시 사용해야 하는 값을 변수에 저장합니다.
 
 ---
 
-### 2. 자료형
+### 2. 자료형과 자주 쓰는 기능
 
-자료형은 값의 종류입니다. Python은 값의 종류에 따라 할 수 있는 일이 다릅니다.
+자료형은 값의 종류입니다. Python은 값의 종류에 따라 할 수 있는 일과 사용할 수 있는 메서드가 달라집니다.
 
-이번 미션에서 특히 중요한 자료형은 `int`, `str`, `bool`, `list`, `dict`입니다.
+이번 미션에서 특히 중요한 자료형은 `int`, `str`, `bool`, `list`, `dict`입니다. 함께 알아 두면 좋은 `float`, `tuple`, `set`, `None`도 뒤에서 간단히 다룹니다.
 
 | 자료형 | 뜻 | 예시 | 퀴즈 게임에서의 사용 |
 | --- | --- | --- | --- |
-| `int` | 정수 | `1`, `80` | 메뉴 번호, 정답 번호, 점수 |
+| `int` | 정수 | `1`, `80`, `-3` | 메뉴 번호, 정답 번호, 점수 |
+| `float` | 소수점이 있는 수 | `3.14`, `80.5` | 평균이나 비율 계산 |
 | `str` | 문자열 | `"퀴즈 풀기"` | 문제 문장, 선택지, 안내 메시지 |
 | `bool` | 참/거짓 | `True`, `False` | 정답 여부 판단 |
 | `list` | 여러 값을 순서대로 저장 | `["A", "B", "C"]` | 선택지 목록, 퀴즈 목록 |
-| `dict` | 이름표와 값을 짝으로 저장 | `{"score": 80}` | state.json의 퀴즈 데이터 |
+| `tuple` | 수정할 수 없는 순서 있는 묶음 | `(10, 20)` | 바뀌면 안 되는 값 묶음 |
+| `dict` | 키와 값을 짝으로 저장 | `{"score": 80}` | 퀴즈 한 문제의 전체 정보 |
+| `set` | 중복 없는 값의 모음 | `{"A", "B"}` | 중복 제거, 포함 여부 확인 |
+| `None` | 값이 없음을 나타내는 특별한 값 | `None` | 아직 결과가 없거나 반환값이 없음 |
 
-#### int
+자료형은 `type()`으로 확인할 수 있습니다.
 
-`int`는 정수입니다. 계산하거나 범위를 비교할 때 사용합니다.
+```python
+print(type(3))          # <class 'int'>
+print(type("3"))        # <class 'str'>
+print(type([1, 2, 3]))  # <class 'list'>
+```
+
+`isinstance()`는 어떤 값이 특정 자료형인지 `True` 또는 `False`로 알려 줍니다.
+
+```python
+answer = 3
+
+print(isinstance(answer, int))  # True
+print(isinstance(answer, str))  # False
+```
+
+#### int와 float
+
+`int`는 정수이고 `float`는 소수점이 있는 수입니다.
 
 ```python
 menu_number = 1
-answer = 3
 score = 90
+average = 8.5
 ```
 
-사용자 입력은 처음에는 문자열입니다. 숫자로 비교하려면 `int()`로 변환해야 합니다.
+숫자에는 다음과 같은 연산을 자주 사용합니다.
+
+```python
+print(7 + 2)   # 9: 더하기
+print(7 - 2)   # 5: 빼기
+print(7 * 2)   # 14: 곱하기
+print(7 / 2)   # 3.5: 나누기 결과는 float
+print(7 // 2)  # 3: 몫
+print(7 % 2)   # 1: 나머지
+print(2 ** 3)  # 8: 거듭제곱
+```
+
+사용자 입력은 처음에는 문자열입니다. 숫자로 계산하거나 비교하려면 `int()` 또는 `float()`로 변환해야 합니다.
 
 ```python
 raw = input("정답 번호: ")
@@ -84,63 +117,179 @@ user_answer = int(raw)
 print("3" == 3)  # False
 ```
 
+`int("abc")`처럼 숫자가 아닌 문자열을 변환하면 `ValueError`가 발생하므로 사용자 입력은 `try/except`로 처리하는 것이 안전합니다.
+
 #### str
 
-`str`은 문자열입니다. 글자 데이터를 표현합니다.
+`str`은 글자 데이터를 나타내는 문자열입니다. 따옴표로 만듭니다.
 
 ```python
 question = "Python의 창시자는?"
-message = "정답입니다."
+message = '정답입니다.'
 ```
 
-문자열 앞뒤 공백을 제거할 때는 `strip()`을 사용합니다.
+문자열도 리스트처럼 순서가 있어서 인덱스와 슬라이싱을 사용할 수 있습니다.
+
+```python
+word = "Python"
+
+print(word[0])    # P
+print(word[-1])   # n: 뒤에서 첫 번째
+print(word[0:3])  # Pyt: 0번부터 3번 직전까지
+print(len(word))  # 6
+```
+
+자주 사용하는 문자열 메서드:
+
+| 메서드 | 의미 | 예시 결과 |
+| --- | --- | --- |
+| `strip()` | 앞뒤 공백 제거 | `"  1  ".strip()` → `"1"` |
+| `lower()` | 영어를 소문자로 변환 | `"YES".lower()` → `"yes"` |
+| `upper()` | 영어를 대문자로 변환 | `"yes".upper()` → `"YES"` |
+| `replace(a, b)` | 문자열 일부를 교체 | `"A-B".replace("-", ":")` → `"A:B"` |
+| `split(기준)` | 문자열을 나누어 리스트로 반환 | `"A,B".split(",")` → `["A", "B"]` |
+| `구분자.join(목록)` | 문자열 목록을 하나로 연결 | `", ".join(["A", "B"])` → `"A, B"` |
+
+이번 미션에서는 입력 앞뒤 공백을 제거하기 위해 `strip()`을 자주 사용합니다.
 
 ```python
 menu = input("메뉴 선택: ").strip()
 ```
 
-이번 미션의 공통 입력 조건에서 "입력 앞뒤 공백 제거 후 처리"가 있었기 때문에 `strip()`이 중요합니다.
+문자열은 한 번 만들어지면 그 내용 자체를 바꿀 수 없습니다. `strip()`이나 `replace()`는 원본을 수정하지 않고 새로운 문자열을 돌려줍니다.
 
-#### bool
+```python
+raw = "  1  "
+cleaned = raw.strip()
 
-`bool`은 참 또는 거짓을 나타냅니다.
+print(raw)      # "  1  " 그대로
+print(cleaned)  # "1"
+```
+
+#### bool과 참처럼/거짓처럼 판단되는 값
+
+`bool`은 참 또는 거짓을 나타내며 값은 `True`, `False` 두 개입니다.
 
 ```python
 is_correct = user_answer == answer
+print(is_correct)  # 비교 결과에 따라 True 또는 False
 ```
 
-`user_answer == answer`의 결과는 `True` 또는 `False`입니다.
+조건문에는 꼭 `True`나 `False`만 넣을 필요가 없습니다. Python은 다른 값도 참 또는 거짓처럼 판단합니다. 이를 보통 **Truthy(참 같은 값)**, **Falsy(거짓 같은 값)**라고 부릅니다.
+
+대표적인 Falsy 값:
+
+| 값 | 의미 |
+| --- | --- |
+| `False` | 거짓 자체 |
+| `None` | 값이 없음 |
+| `0`, `0.0` | 숫자 0 |
+| `""` | 빈 문자열 |
+| `[]` | 빈 리스트 |
+| `{}` | 빈 딕셔너리 |
+| `()` | 빈 튜플 |
+| `set()` | 빈 세트 |
 
 ```python
-if is_correct:
-    print("정답입니다.")
-else:
-    print("틀렸습니다.")
+print(bool(0))       # False
+print(bool(""))      # False
+print(bool([]))      # False
+print(bool({}))      # False
+
+print(bool(1))       # True
+print(bool("hello")) # True
+print(bool([0]))     # True: 안에 0이 있어도 리스트 자체는 비어 있지 않음
 ```
+
+문자열 `"False"`와 `"0"`도 비어 있지 않은 문자열이므로 `True`처럼 판단된다는 점에 주의합니다.
+
+```python
+print(bool("False"))  # True
+print(bool("0"))      # True
+```
+
+이 성질을 이용하면 목록이나 입력이 비었는지 간단히 확인할 수 있습니다.
+
+```python
+if not quizzes:
+    print("퀴즈가 없습니다.")
+
+if user_input:
+    print("무언가 입력했습니다.")
+```
+
+`not`은 참과 거짓을 반대로 바꿉니다. 따라서 `not []`는 `True`이고 `not [1]`은 `False`입니다.
 
 #### list
 
-`list`는 여러 값을 순서대로 담는 자료형입니다.
+`list`는 여러 값을 순서대로 담는 자료형입니다. 요소를 추가·수정·삭제할 수 있는 **변경 가능한(mutable)** 자료형입니다.
 
 ```python
 choices = ["Guido", "Linus", "Bjarne", "James"]
 
-print(choices[0])  # Guido
-print(choices[1])  # Linus
+print(choices[0])   # Guido
+print(choices[-1])  # James
+print(choices[1:3]) # ["Linus", "Bjarne"]
+print(len(choices)) # 4
 ```
 
 Python 리스트의 인덱스는 0부터 시작합니다. 하지만 퀴즈 정답 번호는 사용자가 보기 쉽게 1부터 4까지 사용합니다.
-
-그래서 정답 선택지를 출력할 때는 `enumerate(..., start=1)`을 사용하면 좋습니다.
 
 ```python
 for number, choice in enumerate(choices, start=1):
     print(f"{number}. {choice}")
 ```
 
+자주 사용하는 리스트 메서드:
+
+| 메서드 | 의미 | 예시 |
+| --- | --- | --- |
+| `append(x)` | 맨 뒤에 요소 하나 추가 | `choices.append("Dennis")` |
+| `extend(목록)` | 여러 요소를 맨 뒤에 추가 | `choices.extend(["A", "B"])` |
+| `insert(i, x)` | 원하는 인덱스에 요소 추가 | `choices.insert(0, "첫 선택지")` |
+| `remove(x)` | 값과 같은 첫 요소 삭제 | `choices.remove("Linus")` |
+| `pop(i)` | 해당 인덱스의 요소를 꺼내며 삭제 | `deleted = choices.pop(1)` |
+| `clear()` | 모든 요소 삭제 | `choices.clear()` |
+| `index(x)` | 값이 처음 나온 인덱스 반환 | `choices.index("Guido")` |
+| `count(x)` | 같은 값의 개수 반환 | `choices.count("Guido")` |
+| `sort()` | 원본 리스트를 오름차순 정렬 | `scores.sort()` |
+| `reverse()` | 원본 리스트의 순서를 뒤집음 | `choices.reverse()` |
+| `copy()` | 얕은 복사본 생성 | `copied = choices.copy()` |
+
+`append()`는 전달한 값 하나를 그대로 넣고, `extend()`는 전달한 목록 안의 요소를 하나씩 넣습니다.
+
+```python
+items = [1, 2]
+items.append([3, 4])
+print(items)  # [1, 2, [3, 4]]
+
+items = [1, 2]
+items.extend([3, 4])
+print(items)  # [1, 2, 3, 4]
+```
+
+리스트에 값이 있는지는 `in`으로 확인합니다.
+
+```python
+if "Guido" in choices:
+    print("선택지에 있습니다.")
+```
+
+`append()`와 `sort()`는 원본 리스트를 직접 바꾸고 `None`을 반환합니다. 다음처럼 작성하면 `scores`에 정렬된 리스트가 아니라 `None`이 저장됩니다. 반면 `pop()`은 원본에서 요소를 삭제하면서 그 요소를 반환합니다.
+
+```python
+scores = [30, 10, 20]
+scores.sort()
+print(scores)  # [10, 20, 30]
+
+# 잘못 사용하기 쉬운 예
+scores = scores.sort()
+print(scores)  # None
+```
+
 #### dict
 
-`dict`는 key와 value를 짝으로 저장합니다.
+`dict`는 **key(키)**와 **value(값)**를 한 쌍으로 저장합니다. 리스트가 위치 번호로 값을 찾는다면 딕셔너리는 의미 있는 키로 값을 찾습니다. 키는 중복될 수 없고, 같은 키에 값을 다시 넣으면 기존 값이 바뀝니다.
 
 ```python
 quiz_data = {
@@ -149,14 +298,145 @@ quiz_data = {
     "answer": 1,
     "hint": "네덜란드 출신입니다."
 }
-
-print(quiz_data["question"])
-print(quiz_data["choices"])
 ```
 
-설명 연습:
+값 조회와 추가·수정:
 
-> 자료형은 데이터의 종류입니다. 점수나 정답 번호는 계산과 비교가 필요해서 int를 쓰고, 문제와 선택지는 글자이기 때문에 str을 씁니다. 여러 선택지는 list로 묶고, 문제 하나의 전체 정보는 dict로 저장합니다.
+```python
+print(quiz_data["question"])  # 기존 키의 값 조회
+
+quiz_data["score"] = 10       # 새 키와 값 추가
+quiz_data["answer"] = 2       # 기존 키의 값 수정
+```
+
+`dict[키]`로 없는 키를 조회하면 `KeyError`가 발생합니다. 키가 없을 수도 있다면 `get()`을 사용합니다.
+
+```python
+print(quiz_data.get("hint"))                 # 있으면 힌트 반환
+print(quiz_data.get("category"))             # 없으면 None 반환
+print(quiz_data.get("wrong_count", 0))       # 없으면 기본값 0 반환
+```
+
+`get()`은 기본값을 돌려주기만 하고 딕셔너리에 새 키를 추가하지는 않습니다.
+
+```python
+data = {}
+count = data.get("count", 0)
+
+print(count)  # 0
+print(data)   # {}: "count" 키는 추가되지 않음
+```
+
+`setdefault(키, 기본값)`는 키가 있으면 기존 값을 반환하고, 없으면 기본값을 실제 딕셔너리에 추가한 뒤 반환합니다.
+
+```python
+data = {}
+quizzes = data.setdefault("quizzes", [])
+
+print(quizzes)  # []
+print(data)     # {"quizzes": []}: 키가 실제로 추가됨
+```
+
+이미 키가 있으면 값을 덮어쓰지 않습니다.
+
+```python
+data = {"best_score": 80}
+score = data.setdefault("best_score", 0)
+
+print(score)  # 80
+print(data)   # {"best_score": 80}
+```
+
+따라서 단순 조회에는 `get()`을, 키가 없을 때 기본 구조까지 저장해야 한다면 `setdefault()`를 사용할 수 있습니다. 이번 프로젝트의 다음 코드는 저장 데이터에 `history`가 없을 때 빈 리스트를 만들어 넣습니다.
+
+```python
+self.history = self.data.setdefault("history", [])
+```
+
+딕셔너리의 자주 쓰는 기능:
+
+| 기능 | 의미 |
+| --- | --- |
+| `key in data` | 키가 존재하는지 확인 |
+| `data.keys()` | 모든 키 확인 |
+| `data.values()` | 모든 값 확인 |
+| `data.items()` | 키와 값을 쌍으로 확인 |
+| `data.update(other)` | 다른 딕셔너리의 내용을 추가하거나 갱신 |
+| `data.pop(key)` | 키에 해당하는 값을 꺼내며 삭제 |
+| `del data[key]` | 키와 값을 삭제 |
+
+```python
+for key, value in quiz_data.items():
+    print(key, value)
+
+if "hint" in quiz_data:
+    print(quiz_data["hint"])
+
+deleted_hint = quiz_data.pop("hint", "힌트가 없습니다.")
+```
+
+`pop("hint", 기본값)`처럼 기본값을 함께 주면 키가 없어도 `KeyError`가 발생하지 않습니다.
+
+#### tuple, set, None
+
+`tuple`은 리스트처럼 순서가 있지만 만든 뒤 요소를 추가·수정·삭제할 수 없습니다.
+
+```python
+point = (10, 20)
+print(point[0])  # 10
+```
+
+`set`은 순서를 기준으로 사용하지 않고 중복을 허용하지 않는 값의 모음입니다. 빈 세트는 `{}`가 아니라 `set()`으로 만듭니다. `{}`는 빈 딕셔너리입니다.
+
+```python
+answers = [1, 1, 2, 3, 3]
+unique_answers = set(answers)
+
+print(unique_answers)  # {1, 2, 3}, 출력 순서는 달라질 수 있음
+unique_answers.add(4)
+unique_answers.discard(1)  # 값이 없어도 오류가 나지 않음
+```
+
+`None`은 숫자 0이나 빈 문자열과 다른, **값이 없음**을 나타내는 특별한 값입니다.
+
+```python
+result = None
+
+if result is None:
+    print("아직 결과가 없습니다.")
+```
+
+`None`인지 확인할 때는 보통 `==`보다 `is None`, `is not None`을 사용합니다.
+
+#### 변경 가능한 값과 변경 불가능한 값
+
+- 변경 가능(mutable): `list`, `dict`, `set`
+- 변경 불가능(immutable): `int`, `float`, `bool`, `str`, `tuple`
+
+변경 가능한 값은 같은 객체의 내용을 바꿀 수 있습니다. 변수 두 개가 같은 리스트를 가리키면 한쪽에서 수정한 내용이 다른 쪽에서도 보입니다.
+
+```python
+original = [1, 2]
+same_list = original
+same_list.append(3)
+
+print(original)  # [1, 2, 3]
+```
+
+독립된 리스트가 필요하면 `copy()`를 사용할 수 있습니다.
+
+```python
+original = [1, 2]
+copied = original.copy()
+copied.append(3)
+
+print(original)  # [1, 2]
+print(copied)    # [1, 2, 3]
+```
+
+요약:
+
+> 자료형은 데이터의 종류이며 자료형마다 사용할 수 있는 기능이 다릅니다. 점수와 정답 번호는 int, 문제 문장은 str, 선택지와 퀴즈 목록은 list, 퀴즈 하나의 정보는 dict로 표현했습니다. 빈 문자열이나 빈 리스트, 숫자 0은 조건문에서 False처럼 판단되며, 데이터가 비었는지 확인할 때 이 성질을 활용할 수 있습니다.
 
 ---
 
@@ -214,7 +494,7 @@ if answer < 1 or answer > 4:
 
 `or`는 둘 중 하나라도 참이면 전체가 참입니다. 위 코드는 `answer`가 1보다 작거나 4보다 크면 잘못된 입력으로 처리합니다.
 
-설명 연습:
+요약:
 
 > 조건문은 프로그램이 상황에 따라 다른 동작을 하게 만드는 문법입니다. 퀴즈 게임에서는 메뉴 선택, 정답 여부, 입력 범위 검사, 최고 점수 갱신 같은 부분에서 조건문을 사용했습니다.
 
@@ -294,7 +574,7 @@ while True:
 
 `continue`는 아래 코드를 건너뛰고 다음 반복으로 돌아갑니다. 잘못된 입력을 받았을 때 재입력을 유도하기 좋습니다.
 
-설명 연습:
+요약:
 
 > for는 퀴즈 목록이나 선택지처럼 반복할 대상이 정해져 있을 때 사용합니다. while은 사용자가 올바른 값을 입력할 때까지 계속 물어봐야 하는 상황처럼 반복 종료 시점이 입력에 따라 달라질 때 사용합니다.
 
@@ -330,18 +610,51 @@ result = calculate_score(4, 5)
 print(result)
 ```
 
-#### 매개변수와 반환값
+#### 매개변수, 인자, 반환값
 
-매개변수는 함수에 전달하는 입력값입니다.
+**매개변수(parameter)**와 **인자(argument)**는 비슷해 보이지만 사용하는 시점이 다릅니다.
+
+- 매개변수: 함수를 정의할 때 값을 받을 자리에 붙인 이름
+- 인자: 함수를 호출할 때 실제로 전달하는 값
 
 ```python
-def greet(name):
+def greet(name):       # name은 매개변수
     print(f"{name}님 안녕하세요.")
 
-greet("철수")
+greet("철수")          # "철수"는 인자
 ```
 
-반환값은 함수가 작업을 끝낸 뒤 돌려주는 결과입니다.
+쉽게 말하면 매개변수는 빈칸의 이름이고, 인자는 그 빈칸에 실제로 넣는 값입니다.
+
+##### 위치 인자와 키워드 인자
+
+인자는 순서대로 전달하거나 매개변수 이름을 지정해서 전달할 수 있습니다.
+
+```python
+def introduce(name, age):
+    print(f"{name}님은 {age}살입니다.")
+
+introduce("철수", 20)              # 위치 인자: 순서가 중요함
+introduce(age=20, name="철수")      # 키워드 인자: 이름으로 전달함
+```
+
+##### 기본값이 있는 매개변수
+
+함수를 정의할 때 매개변수에 기본값을 지정하면, 호출할 때 해당 인자를 생략할 수 있습니다.
+
+```python
+def greet(name, message="안녕하세요"):
+    print(f"{name}님, {message}.")
+
+greet("철수")                 # 철수님, 안녕하세요.
+greet("영희", "반갑습니다")   # 영희님, 반갑습니다.
+```
+
+기본값이 없는 매개변수를 먼저 쓰고, 기본값이 있는 매개변수를 뒤에 씁니다.
+
+##### 반환값과 return
+
+반환값은 함수가 작업을 끝낸 뒤 호출한 곳으로 돌려주는 결과입니다.
 
 ```python
 def is_correct(user_answer, answer):
@@ -350,6 +663,33 @@ def is_correct(user_answer, answer):
 result = is_correct(2, 2)
 print(result)  # True
 ```
+
+`return`을 실행하면 함수는 즉시 끝납니다. `return`이 없거나 값 없이 `return`하면 함수의 반환값은 `None`입니다.
+
+```python
+def show_message():
+    print("게임 시작")
+
+result = show_message()
+print(result)  # None
+```
+
+`print()`는 화면에 보여 주고, `return`은 값을 함수 밖에서 다시 사용할 수 있게 돌려준다는 차이가 있습니다.
+
+##### 타입 힌트
+
+타입 힌트는 매개변수와 반환값에 어떤 자료형을 기대하는지 적어 둔 안내입니다.
+
+```python
+def add_score(score: int, point: int) -> int:
+    return score + point
+```
+
+- `score: int`: `score`에는 `int`를 기대함
+- `point: int`: `point`에는 `int`를 기대함
+- `-> int`: 함수가 `int`를 반환할 예정임
+
+타입 힌트는 코드를 이해하고 실수를 찾는 데 도움을 주지만, Python이 실행 중에 타입을 자동으로 강제하거나 변환해 주는 것은 아닙니다.
 
 #### 이번 프로젝트의 함수 예시
 
@@ -365,11 +705,20 @@ def get_user_input(prompt: str, msg: str = "입력이 비었습니다. 다시 �
             return user_input
 ```
 
-이 함수를 사용하면 문제 입력, 선택지 입력, 정답 입력에서 빈 문자열 검사를 반복해서 작성하지 않아도 됩니다.
+여기서 `prompt`와 `msg`는 매개변수이고, `msg`에는 기본값이 있습니다. `-> str`은 문자열을 반환한다는 타입 힌트입니다.
 
-설명 연습:
+```python
+question = get_user_input(
+    "문제: ",
+    msg="문제를 비워둘 수 없습니다."
+)
+```
 
-> 함수는 특정 기능을 재사용할 수 있게 묶어 둔 코드입니다. 이번 프로젝트에서는 입력 처리처럼 여러 곳에서 반복되는 로직을 함수로 분리해서 코드 중복을 줄였습니다.
+위 호출에서 `"문제: "`는 위치 인자이고 `msg="문제를 비워둘 수 없습니다."`는 키워드 인자입니다. 이 함수를 사용하면 문제 입력, 선택지 입력, 정답 입력에서 빈 문자열 검사를 반복해서 작성하지 않아도 됩니다.
+
+요약:
+
+> 함수는 특정 기능을 재사용할 수 있게 묶어 둔 코드입니다. 함수를 정의할 때 값을 받을 이름은 매개변수이고, 함수를 호출할 때 실제로 전달하는 값은 인자입니다. 이번 프로젝트에서는 입력 처리처럼 여러 곳에서 반복되는 로직을 함수로 분리해서 코드 중복을 줄였습니다.
 
 ---
 
@@ -406,17 +755,17 @@ class Quiz:
         return user_answer == self.answer
 ```
 
-설명 연습:
+요약:
 
 > 클래스는 관련된 데이터와 기능을 묶는 설계도입니다. 퀴즈 게임에서는 문제, 선택지, 정답 같은 데이터를 Quiz 클래스로 묶고, 게임 진행과 저장은 QuizGame 클래스로 분리했습니다.
 
 ---
 
-### 2. 객체란 무엇인가
+### 2. 객체와 인스턴스는 무엇인가
 
-객체는 클래스를 바탕으로 실제로 만들어진 값입니다.
+**객체(object)**는 Python 프로그램 안에서 다루는 값입니다. 숫자, 문자열, 리스트뿐 아니라 클래스로 직접 만든 값도 모두 객체입니다.
 
-클래스가 설계도라면 객체는 설계도로 만든 실제 제품입니다.
+**인스턴스(instance)**는 "어떤 클래스로부터 만들어진 객체인가"를 강조하는 말입니다. 클래스가 설계도라면 인스턴스는 그 설계도로 만든 실제 제품입니다.
 
 ```python
 quiz = Quiz(
@@ -427,7 +776,26 @@ quiz = Quiz(
 )
 ```
 
-위 코드에서 `Quiz`는 클래스이고, `quiz`는 객체입니다.
+위 코드의 관계를 정확히 말하면 다음과 같습니다.
+
+- `Quiz`: 클래스
+- `Quiz(...)`로 만들어진 값: 객체
+- 그 객체는 `Quiz` 클래스의 인스턴스
+- `quiz`: 그 객체를 가리키는 변수 이름
+
+따라서 "`quiz`는 객체입니다"라고 말해도 일상적인 설명으로는 충분하고, "`quiz`가 가리키는 객체는 `Quiz` 클래스의 인스턴스입니다"라고 말하면 관계가 더 정확하게 드러납니다.
+
+하나의 클래스에서 여러 인스턴스를 만들 수 있으며, 각 인스턴스는 서로 다른 속성값을 가질 수 있습니다.
+
+```python
+quiz1 = Quiz("1번 문제", ["A", "B", "C", "D"], 1, "힌트 1")
+quiz2 = Quiz("2번 문제", ["A", "B", "C", "D"], 3, "힌트 2")
+
+print(isinstance(quiz1, Quiz))  # True
+print(isinstance(quiz2, Quiz))  # True
+print(quiz1.answer)             # 1
+print(quiz2.answer)             # 3
+```
 
 객체의 속성에 접근할 때는 점(`.`)을 사용합니다.
 
@@ -441,6 +809,12 @@ print(quiz.answer)
 ```python
 quiz.check_answer(1)
 ```
+
+여기서 `quiz.question`은 속성 접근이고 `quiz.check_answer(1)`은 메서드 호출입니다.
+
+요약:
+
+> 객체는 Python에서 다루는 값이고, 인스턴스는 특정 클래스와 객체의 관계를 나타내는 말입니다. quiz가 가리키는 객체는 Quiz 클래스로 만든 객체이므로 Quiz의 인스턴스라고 할 수 있습니다.
 
 ---
 
@@ -465,7 +839,7 @@ quiz = Quiz("문제", ["A", "B", "C", "D"], 1, "힌트")
 
 이때 전달한 값들이 `self.question`, `self.choices`, `self.answer`, `self.hint`에 저장됩니다.
 
-설명 연습:
+요약:
 
 > __init__은 객체가 처음 만들어질 때 필요한 초기값을 넣어 주는 메서드입니다. Quiz 객체를 만들 때 문제, 선택지, 정답, 힌트를 받아서 객체 속성으로 저장합니다.
 
@@ -494,7 +868,7 @@ print(quiz2.answer)  # 3
 
 `self`가 있기 때문에 같은 `check_answer()` 메서드를 사용해도 각 객체의 정답과 비교할 수 있습니다.
 
-설명 연습:
+요약:
 
 > self는 현재 메서드를 호출한 객체 자신을 의미합니다. 같은 Quiz 클래스에서 만든 객체라도 문제와 정답은 각각 다르기 때문에, self를 통해 각 객체의 속성에 접근합니다.
 
@@ -531,7 +905,7 @@ def check_answer(self, user_answer):
 
 이렇게 나누면 코드가 한 파일이나 한 함수에 몰리지 않고, 각 클래스가 맡은 책임이 분명해집니다.
 
-설명 연습:
+요약:
 
 > 속성은 객체가 가진 데이터이고, 메서드는 객체가 수행하는 기능입니다. Quiz의 속성은 question, choices, answer, hint이고, 메서드는 display, display_hint, check_answer입니다.
 
@@ -588,7 +962,7 @@ with open("state.json", "r", encoding="utf-8") as f:
 
 `encoding="utf-8"`은 한글이 깨지지 않도록 하기 위해 중요합니다.
 
-설명 연습:
+요약:
 
 > 파일 입출력은 프로그램 밖의 파일에 데이터를 저장하거나 불러오는 작업입니다. 이번 프로젝트에서는 프로그램을 종료해도 퀴즈와 최고 점수가 유지되도록 state.json을 읽고 씁니다.
 
@@ -654,7 +1028,7 @@ with open("state.json", "r", encoding="utf-8") as f:
 
 `indent=4`는 사람이 읽기 좋게 들여쓰기해서 저장한다는 뜻입니다.
 
-설명 연습:
+요약:
 
 > JSON은 데이터를 저장하기 위한 텍스트 형식입니다. Python의 dict와 list 구조와 비슷해서 퀴즈 목록, 최고 점수, 플레이 기록을 저장하기에 적합합니다.
 
@@ -705,7 +1079,7 @@ except json.JSONDecodeError:
     print("저장 파일이 손상되어 기본 데이터로 복구합니다.")
 ```
 
-설명 연습:
+요약:
 
 > try/except는 오류가 발생할 수 있는 코드를 안전하게 실행하기 위한 문법입니다. 숫자 변환 실패나 state.json 손상처럼 예상 가능한 문제를 처리해서 프로그램이 갑자기 종료되지 않도록 합니다.
 
@@ -737,7 +1111,7 @@ except json.JSONDecodeError:
 4. 손상된 파일을 백업하거나 기본 데이터로 초기화한다.
 5. 프로그램은 계속 실행된다.
 
-설명 연습:
+요약:
 
 > 데이터 파일이 없거나 손상되어도 프로그램이 실행되어야 합니다. 그래서 FileNotFoundError와 JSONDecodeError를 처리하고, 문제가 있으면 기본 퀴즈 데이터로 복구하도록 만들었습니다.
 
@@ -758,7 +1132,7 @@ Git은 파일의 변경 이력을 기록하는 버전 관리 도구입니다.
 
 Git은 이런 문제를 해결하기 위해 사용합니다.
 
-설명 연습:
+요약:
 
 > Git은 코드의 변경 이력을 저장하고 관리하는 도구입니다. 기능 단위로 커밋하면 어떤 변경을 언제 왜 했는지 추적할 수 있고, 문제가 생겼을 때 이전 상태와 비교할 수 있습니다.
 
@@ -779,7 +1153,7 @@ git init
 - `git init`만 했다고 모든 파일이 자동으로 저장되는 것은 아닙니다.
 - 변경 내용을 기록하려면 `git add`와 `git commit`이 필요합니다.
 
-설명 연습:
+요약:
 
 > git init은 현재 프로젝트 폴더를 Git이 관리하는 저장소로 초기화하는 명령입니다.
 
@@ -799,7 +1173,7 @@ git status
 - 어떤 파일을 아직 `git add`하지 않았는지 알 수 있습니다.
 - 현재 브랜치가 무엇인지 확인할 수 있습니다.
 
-설명 연습:
+요약:
 
 > git status는 현재 작업 디렉터리의 변경 상태를 확인하는 명령입니다. 커밋하기 전에 어떤 파일이 포함될지 확인할 때 사용합니다.
 
@@ -822,7 +1196,7 @@ git add .
 
 하지만 처음에는 파일을 직접 지정하는 습관이 좋습니다. 그래야 원하지 않는 파일이 커밋에 들어가는 실수를 줄일 수 있습니다.
 
-설명 연습:
+요약:
 
 > git add는 변경된 파일 중 이번 커밋에 포함할 파일을 스테이징 영역에 올리는 명령입니다.
 
@@ -857,7 +1231,7 @@ git commit -m "asdf"
 
 왜냐하면 나중에 `git log`를 봤을 때 무엇을 바꿨는지 알기 어렵기 때문입니다.
 
-설명 연습:
+요약:
 
 > git commit은 선택한 변경 사항을 하나의 이력으로 저장하는 명령입니다. 기능 단위로 커밋하면 개발 과정을 설명하기 쉽고, 문제가 생겼을 때 원인을 찾기 쉽습니다.
 
@@ -887,7 +1261,7 @@ git checkout main
 - 기능별 작업 기록이 분리됩니다.
 - 나중에 팀 프로젝트에서 Pull Request 흐름으로 확장할 수 있습니다.
 
-설명 연습:
+요약:
 
 > 브랜치는 main 코드와 분리해서 새 기능을 개발하기 위한 작업 공간입니다. checkout은 브랜치를 이동하거나 새 브랜치를 만들어 이동할 때 사용합니다.
 
@@ -916,7 +1290,7 @@ git merge feature/play-quiz
 3. `main`으로 돌아온다.
 4. `feature/play-quiz`의 변경사항을 `main`에 합친다.
 
-설명 연습:
+요약:
 
 > merge는 한 브랜치의 변경사항을 다른 브랜치에 합치는 명령입니다. 이번 미션에서는 퀴즈 풀기 기능을 별도 브랜치에서 만든 뒤 main으로 병합하는 흐름을 경험합니다.
 
@@ -946,7 +1320,7 @@ git push origin main
 
 `origin`은 원격 저장소의 기본 이름이고, `main`은 올릴 브랜치 이름입니다.
 
-설명 연습:
+요약:
 
 > push는 로컬 Git 커밋을 GitHub 같은 원격 저장소에 업로드하는 명령입니다.
 
@@ -970,7 +1344,7 @@ git clone https://github.com/사용자명/저장소명.git mission2-clone
 cd mission2-clone
 ```
 
-설명 연습:
+요약:
 
 > clone은 원격 저장소의 전체 프로젝트와 Git 이력을 새로운 로컬 폴더로 복제하는 명령입니다.
 
@@ -993,7 +1367,7 @@ git pull origin main
 5. 원래 작업 폴더로 돌아온다.
 6. `git pull origin main`으로 변경사항을 가져온다.
 
-설명 연습:
+요약:
 
 > pull은 원격 저장소에 새로 올라온 커밋을 내 로컬 저장소로 가져오는 명령입니다. 다른 위치나 다른 사람이 올린 변경사항을 현재 프로젝트에 반영할 때 사용합니다.
 
@@ -1137,7 +1511,7 @@ while True:
 
 핵심은 사용자의 실수를 프로그램 오류로 취급하지 않는 것입니다. 사용자가 잘못 입력하면 안내 메시지를 보여 주고 다시 입력받아야 합니다.
 
-설명 연습:
+요약:
 
 > 사용자 입력은 항상 예상과 다를 수 있기 때문에 검증이 필요합니다. strip으로 공백을 제거하고, 빈 입력과 숫자 변환 실패, 범위 초과를 처리해서 프로그램이 안정적으로 동작하도록 했습니다.
 
@@ -1163,7 +1537,76 @@ Git:
 
 ---
 
-## 8. 최종 점검 체크리스트
+## 8. 초보자를 위한 핵심 용어 사전
+
+코드를 설명할 때 자주 사용하는 용어를 한곳에 정리했습니다.
+
+### 값, 변수, 표현식, 문장
+
+| 용어 | 쉬운 뜻 | 예시 |
+| --- | --- | --- |
+| 값(value) | 프로그램이 다루는 실제 데이터 | `10`, `"hello"`, `[1, 2]` |
+| 변수(variable) | 값을 가리키기 위해 붙인 이름 | `score = 10`의 `score` |
+| 할당(assignment) | 변수에 값을 연결하는 것 | `score = 10` |
+| 표현식(expression) | 계산하면 하나의 값이 되는 코드 | `score + 10`, `answer == 1` |
+| 문장(statement) | Python이 수행하는 하나의 명령 | `if`, `for`, `return`, 할당문 |
+
+`score + 10`은 계산 결과가 나오는 표현식이고, `score = score + 10`은 그 결과를 다시 `score`에 할당하는 문장입니다.
+
+### 여러 값을 다루는 용어
+
+| 용어 | 쉬운 뜻 | 예시 |
+| --- | --- | --- |
+| 요소(element) | 리스트·튜플·세트 안의 값 하나 | `["A", "B"]`의 `"A"` |
+| 인덱스(index) | 순서 있는 값의 위치 번호 | `choices[0]`의 `0` |
+| 슬라이싱(slicing) | 연속된 일부 구간을 잘라 가져오기 | `choices[1:3]` |
+| 키(key) | 딕셔너리에서 값을 찾는 이름표 | `quiz["answer"]`의 `"answer"` |
+| 값(value) | 딕셔너리의 키와 짝을 이루는 데이터 | `{"answer": 1}`의 `1` |
+| 길이(length) | 들어 있는 요소의 개수 | `len(choices)` |
+| 순회(iteration) | 여러 값을 하나씩 꺼내며 반복하는 것 | `for choice in choices:` |
+| 포함 여부(membership) | 어떤 값이 들어 있는지 확인하는 것 | `"A" in choices` |
+
+### 함수와 관련된 용어
+
+| 용어 | 쉬운 뜻 | 예시 |
+| --- | --- | --- |
+| 함수(function) | 특정 작업을 이름 붙여 묶은 코드 | `print()`, `len()`, `get_user_input()` |
+| 호출(call) | 함수나 메서드를 실행하는 것 | `len(choices)` |
+| 매개변수(parameter) | 함수 정의에서 값을 받을 이름 | `def greet(name)`의 `name` |
+| 인자(argument) | 함수 호출 때 실제로 전달하는 값 | `greet("철수")`의 `"철수"` |
+| 반환값(return value) | 함수가 호출한 곳으로 돌려주는 결과 | `len(choices)`의 결과 `4` |
+| 내장 함수(built-in function) | Python이 기본으로 제공하는 함수 | `print()`, `input()`, `len()`, `type()` |
+| 메서드(method) | 특정 객체에 속해 그 객체와 관련된 작업을 하는 함수 | `choices.append("A")` |
+
+함수는 `len(choices)`처럼 이름으로 호출하고, 메서드는 `choices.append("A")`처럼 객체 뒤에 점을 붙여 호출하는 경우가 많습니다.
+
+### 클래스와 관련된 용어
+
+| 용어 | 쉬운 뜻 | 이번 프로젝트 예시 |
+| --- | --- | --- |
+| 클래스(class) | 데이터와 기능을 묶어 객체를 만드는 틀 | `Quiz`, `QuizGame` |
+| 객체(object) | Python에서 다루는 하나의 값 | `Quiz(...)`로 만든 객체 |
+| 인스턴스(instance) | 특정 클래스로 만들어졌음을 나타내는 객체 | `Quiz` 클래스의 인스턴스 `quiz` |
+| 속성(attribute) | 객체가 가지고 있는 데이터 | `quiz.question`, `quiz.answer` |
+| 메서드(method) | 객체가 수행할 수 있는 기능 | `quiz.display()`, `quiz.check_answer()` |
+| 초기화(initialization) | 새 객체에 처음 필요한 상태를 넣는 과정 | `__init__`에서 문제와 정답 저장 |
+| 참조(reference) | 변수가 객체를 가리키는 관계 | `quiz = Quiz(...)` |
+
+### 프로그램 구조와 오류 관련 용어
+
+| 용어 | 쉬운 뜻 | 예시 |
+| --- | --- | --- |
+| 모듈(module) | Python 코드를 담은 `.py` 파일 | `service/quiz.py` |
+| 패키지(package) | 관련 모듈을 묶은 폴더 | `service` |
+| import | 다른 모듈의 코드를 가져와 사용하는 문법 | `from service.quiz import Quiz` |
+| 예외(exception) | 실행 중 발생한 문제를 나타내는 객체 | `ValueError`, `FileNotFoundError` |
+| 예외 처리 | 예상 가능한 예외에 대응하는 것 | `try/except` |
+| 버그(bug) | 프로그램이 의도와 다르게 동작하게 하는 코드 문제 | 점수가 잘못 계산되는 문제 |
+| 디버깅(debugging) | 버그의 원인을 찾고 고치는 과정 | 값 출력, 오류 메시지 확인 |
+
+---
+
+## 9. 최종 점검 체크리스트
 
 아래 질문에 답할 수 있으면 미션 목표를 잘 이해한 것입니다.
 
@@ -1171,13 +1614,24 @@ Python:
 
 - 변수는 왜 필요한가?
 - `int`, `str`, `bool`, `list`, `dict`는 각각 언제 사용하는가?
+- 어떤 값들이 조건문에서 `False`처럼 판단되는가?
+- `"0"`, `[0]`, `0`의 참/거짓 판단 결과는 각각 무엇인가?
+- `append()`와 `extend()`의 차이는 무엇인가?
+- 리스트를 수정하는 `sort()`의 반환값은 무엇인가?
+- 딕셔너리에 키와 값을 추가하거나 수정하려면 어떻게 하는가?
+- `data[key]`, `data.get(key, 기본값)`, `data.setdefault(key, 기본값)`은 어떻게 다른가?
+- 변경 가능한 자료형과 변경 불가능한 자료형의 예를 들 수 있는가?
 - `if / elif / else`는 어떤 상황에서 쓰는가?
 - `for`와 `while`의 차이는 무엇인가?
-- 함수의 매개변수와 반환값은 무엇인가?
+- 함수의 매개변수와 인자는 어떻게 다른가?
+- 위치 인자, 키워드 인자, 기본값이 있는 매개변수는 무엇인가?
+- `print()`와 `return`은 어떻게 다른가?
+- 타입 힌트는 무엇이며 실행 중 타입을 강제하는가?
 
 클래스:
 
-- 클래스와 객체의 차이는 무엇인가?
+- 클래스, 객체, 인스턴스의 관계는 무엇인가?
+- `quiz`는 객체인가, `Quiz`의 인스턴스인가?
 - `__init__`은 언제 실행되는가?
 - `self`는 무엇을 가리키는가?
 - 속성과 메서드의 차이는 무엇인가?
@@ -1201,7 +1655,7 @@ Git:
 
 ---
 
-## 9. 자주 헷갈리는 부분
+## 10. 자주 헷갈리는 부분
 
 ### "3"과 3은 다르다
 
@@ -1237,6 +1691,65 @@ print(result)
 ```
 
 `return`은 함수 밖으로 값을 돌려주는 것이고, `print`는 화면에 출력하는 것입니다.
+
+---
+
+### 비어 있는 값은 조건문에서 False처럼 판단된다
+
+```python
+print(bool(0))   # False
+print(bool(""))  # False
+print(bool([]))  # False
+print(bool({}))  # False
+```
+
+하지만 안에 값이 하나라도 있으면 그 값 자체가 `0`이나 `False`여도 목록과 문자열은 비어 있지 않습니다.
+
+```python
+print(bool([0]))      # True
+print(bool([False]))  # True
+print(bool("0"))      # True
+```
+
+---
+
+### append는 리스트를 바꾸지만 새 리스트를 반환하지 않는다
+
+```python
+choices = ["A", "B"]
+result = choices.append("C")
+
+print(choices)  # ["A", "B", "C"]
+print(result)   # None
+```
+
+따라서 `choices = choices.append("C")`라고 작성하면 `choices`에 `None`이 저장되므로 주의합니다.
+
+---
+
+### get과 setdefault는 기본값을 다르게 다룬다
+
+```python
+data = {}
+
+data.get("history", [])         # 빈 리스트를 반환만 함
+print(data)                      # {}
+
+data.setdefault("history", [])  # 빈 리스트를 반환하고 딕셔너리에도 추가함
+print(data)                      # {"history": []}
+```
+
+조회만 필요하면 `get()`, 없는 키와 기본값을 딕셔너리에 저장해야 하면 `setdefault()`를 사용할 수 있습니다.
+
+---
+
+### 객체와 인스턴스는 서로 반대되는 말이 아니다
+
+```python
+quiz = Quiz("문제", ["A", "B", "C", "D"], 1, "힌트")
+```
+
+`quiz`가 가리키는 값은 객체이면서 동시에 `Quiz` 클래스의 인스턴스입니다. "객체"는 값 자체를 넓게 부르는 말이고, "인스턴스"는 어떤 클래스로 만들었는지를 강조하는 말입니다.
 
 ---
 

@@ -83,6 +83,10 @@ state.json 스키마 예시
 
 - git clone
 ![git clone](./docs/screenshots/CleanShot%202026-08-10%20at%2011.48.31.png)
+![git pull origin main - 상태 최신화](./docs/screenshots/CleanShot%202026-08-10%20at%2011.51.39.png)
+![README 수정 on stage](./docs/screenshots/CleanShot%202026-08-10%20at%2011.54.33.png)
+![커밋, 깃허브에 반영(push)](./docs/screenshots/CleanShot%202026-08-10%20at%2011.55.06.png)
+![업데이트된 내용 반영](./docs/screenshots/CleanShot%202026-08-10%20at%2011.55.35.png)
 
 Repository 상태(빠른 검사 결과)
 - state.json: 존재 — quizzes 5개 포함 (요구: 5개 이상) ✅
