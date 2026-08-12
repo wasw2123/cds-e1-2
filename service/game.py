@@ -39,6 +39,9 @@ class QuizGame:
 
         try:
             menu_selected = int(input("메뉴 선택: ").strip())
+            if menu_selected not in self.MENUS:
+                print("잘못된 입력입니다. 메뉴와 매칭되는 숫자를 입력해주세요.")
+                return
 
             if menu_selected in self.MENUS:
                 _, func = self.MENUS[menu_selected]
